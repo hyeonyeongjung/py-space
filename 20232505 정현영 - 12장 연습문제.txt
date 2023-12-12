@@ -1,0 +1,161 @@
+12장 연습문제 
+20232505 정현영
+
+1. 다음 JSP 프로그램에서 표현언어에 주의하여 그 결과를 기술하시오. 
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>표현언어 예제</title>
+</head>
+<body>
+
+/${ 3 div 6 } = ${ 3 div 6 } <br>
+
+/${ 10 mod 3 } = ${ 10 mod 3 } <br>
+
+/${ 3 gt 4 } = ${ 3 gt 4 } <br>
+
+/${ 2 * 3 ne 6 } = ${ 2 * 3 ne 6 } <br>
+
+/${ not (5 lt 6 and 7 ge 6) } = ${ not (5 lt 6 and 7 ge 6) } <br>
+
+</body>
+</html>
+
+결과 :
+/0.5 = 0.5
+/1 = 1
+/false = false
+/false = false
+/false = false
+
+2. 다음 JSP 프로그램에서 표현언어에 주의하여 그 결과를 기술하시오. 
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>표현언어 예제</title>
+</head>
+<body>
+
+/${ empty 2 } = ${ empty 2 } <br>
+
+/${ empty 0 } = ${ empty 0 } <br>
+
+/${ empty name } = ${ empty name } <br>
+
+/${ empty requestScope } = ${ empty requestScope } <br>
+
+/${ empty header } = ${ empty header } <br>
+
+</body>
+</html>
+
+결과:
+/false = false
+/false = false
+/true = true
+/true = true
+/false = false
+
+3. 표현언어의 내장 객체 11가지를 기술하시오.
+pageContext - 현재 페이지에 대한 정보를 포함하고 있는 객체
+pageScope - 현재 페이지 범위에 저장된 속성에 접근하는 데 사용되는 객체
+requestScope - HTTP 요청 범위에 저장된 속성에 접근하는 데 사용되는 객체
+sessionScope - HTTP 세션 범위에 저장된 속성에 접근하는 데 사용되는 객체
+applicationScope - 웹 애플리케이션 범위에 저장된 속성에 접근하는 데 사용되는 객체
+param - HTTP 요청 매개변수에 접근하는 데 사용되는 객체
+paramValues - HTTP 요청 매개변수의 값 배열에 접근하는 데 사용되는 객체
+header - HTTP 헤더에 접근하는 데 사용되는 객체
+headerValues - HTTP 헤더의 값 배열에 접근하는 데 사용되는 객체
+initParam - 웹 애플리케이션의 초기화 매개변수에 접근하는 데 사용되는 객체
+cookie - 웹 브라우저의 쿠키에 접근하는 데 사용되는 객체
+
+4. 다음은 표현언어의 내장 객체 header를 출력한 내용이다. 이 출력 내용을 참고로 다음 내장 객체 header에 대한 질문에 답하시오.
+
+JSESSIONID=DCD02CCFE2AA4A994329F3CECEEB4498
+
+(1) 내장 객체 header를 이용하여 다음과 같은 형태로 참조할 수 있는 속성은 "cookie" 이외에 무엇이 더 있겠는가?
+${ header["cookie"] }
+
+${ header["User-Agent"] }
+${ header["Accept-Language"] }
+
+(2) 내장 객체 header에서 이용할 수 있는 모든 속성에 대한 저장 값을 출력하는 프로그램을 작성하시오.
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>12-4-2</title>
+</head>
+<body>
+
+<%
+    Enumeration<String> headerNames = request.getHeaderNames();
+
+    while (headerNames.hasMoreElements()) {
+        String headerName = headerNames.nextElement();
+        String headerValue = request.getHeader(headerName);
+%>
+    ${headerName} : ${headerValue} <br>
+<%
+    }
+%>
+
+</body>
+</html>
+
+5. 다음은 클래스에 정의된 메소드를 태그 라이브러리 디스크립터에서 함수로 정의하여, 표현언어에서 이용하는 과정 기술하였다. 각각의 질문에 답하시오.
+
+(1) 다음 클래스에서 메소드 hello( )를 표현언어에서 함수로 이용할 예정이다. 빈 공간에 알맞은 키워드는 무엇인가?
+package sample;
+
+	public class HelloTLD {
+
+	public static String hello( ) {
+	   return "Hello TLD!";
+	}
+}	
+
+(2) 다음은 TLD 파일 ELfunction.tld 파일의 일부이다. 다음 빈 공간을 알맞게 채우시오.
+<function>
+	<description>간단한 문자열 반환</description>
+	<name>getHello</name>
+	<function-class>
+	    sample.HelloTLD
+	</function-class>
+	<function-signature>
+	    java.lang.String hello()
+	</function-signature>
+</function>
+
+(3) 다음은 위에서 만든 함수를 호출하는 표현언어이다. 다음 빈 공간을 알맞게 채우시오.
+<%@ taglib prefix="test" uri="/WEB-INF/tld/ELfunction.tld" %>
+
+${ test:getHello() }
+
+(4) 위 (3)번 프로그램의 결과는 무엇인가?
+Hello TLD!
+
+6. 다음에서 표현언어 비활성화 지시자를 살펴보고, 다음 표현언어의 결과를 기술하시오.
+(1)
+<%@ page isELIgnored="false" %>
+${ 2 / 4 }
+
+결과:
+0.5
+
+(2)
+<%@ page isELIgnored="true" %>
+${ 2 / 4 }
+
+결과:
+${ 2 / 4 }
